@@ -5,6 +5,15 @@ import api from '../../services/api';
 import { Loading } from './styles';
 
 export default class Repository extends Component {
+  static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        repo: PropTypes.string,
+      }),
+    }).isRequired,
+  };
+
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     repository: {},
     issues: [],
