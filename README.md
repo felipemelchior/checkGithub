@@ -1,4 +1,4 @@
-## Check Repositories
+## Check GitHub
 
 Uma aplicação criada com Javascript e sendo utilizado ReactJS para o desenvolvimento Web e React Native para desenvolvimento Mobile.
 
