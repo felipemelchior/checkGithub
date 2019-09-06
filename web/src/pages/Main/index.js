@@ -9,10 +9,12 @@ import Container from '../../components/Container';
 import { Form, SubmitButton, List } from './styles';
 
 export default class Main extends Component {
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     newRepo: '',
     repositories: [],
     loading: false,
+    error: false,
   };
 
   // Carregar os dados do LocalStorage
@@ -44,21 +46,36 @@ export default class Main extends Component {
 
     const { newRepo, repositories } = this.state;
 
-    const response = await api.get(`/repos/${newRepo}`);
+    try {
+      // eslint-disable-next-line array-callback-return
+      repositories.map(repository => {
+        if (repository.name.toLowerCase() === newRepo) {
+          throw Error('Repositório duplicado!');
+        }
+      });
 
-    const data = {
-      name: response.data.full_name,
-    };
-
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
+      const response = await api.get(`/repos/${newRepo}`);
+      const data = {
+        name: response.data.full_name,
+      };
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+        error: false,
+      });
+    } catch {
+      this.setState({
+        repositories: [...repositories],
+        newRepo: '',
+        loading: false,
+        error: true,
+      });
+    }
   };
 
   render() {
-    const { newRepo, repositories, loading } = this.state;
+    const { newRepo, repositories, loading, error } = this.state;
 
     return (
       <Container>
@@ -67,7 +84,7 @@ export default class Main extends Component {
           Repositórios
         </h1>
 
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} error={error}>
           <input
             type="text"
             placeholder="Adicionar repositório"
