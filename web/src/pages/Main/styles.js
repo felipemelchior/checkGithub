@@ -42,6 +42,10 @@ export const SubmitButton = styled.button.attrs(props => ({
     opacity: 0.6;
   }
 
+  &:hover {
+    background: #71599f;
+  }
+
   ${props =>
     props.loading &&
     css`
@@ -67,8 +71,15 @@ export const List = styled.ul`
     }
 
     a {
-      color: #7159c1;
+      background: #7159c1;
+      padding: 10px 15px;
+      color: #fff;
       text-decoration: none;
+      border-radius: 4px;
+
+      &:hover {
+        background: #71599f;
+      }
     }
   }
 `;

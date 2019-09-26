@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
 import api from '../../services/api';
 
 import Container from '../../components/Container';
@@ -16,12 +17,14 @@ export default class Repository extends Component {
     }).isRequired,
   };
 
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    repository: {},
-    issues: [],
-    loading: true,
-  };
+  constructor() {
+    super();
+    this.state = {
+      repository: {},
+      issues: [],
+      loading: true,
+    };
+  }
 
   async componentDidMount() {
     const { match } = this.props;
@@ -67,7 +70,11 @@ export default class Repository extends Component {
               <img src={issue.user.avatar_url} alt={issue.user.login} />
               <div>
                 <strong>
-                  <a href={issue.html_url} target="_blank">
+                  <a
+                    href={issue.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {issue.title}
                   </a>
                   {issue.labels.map(label => (
