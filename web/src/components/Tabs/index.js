@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import Tab from '../Tab';
 
-import { ListTabs } from './styles.js';
+import { ListTabs } from './styles';
 
 class Tabs extends Component {
   constructor(props) {
@@ -31,6 +33,7 @@ class Tabs extends Component {
 
   renderChildrenTabs = () => {
     const { children } = this.props;
+
     if (!Array.isArray(children)) {
       return this.cloneTabElement(children);
     }
@@ -50,8 +53,6 @@ class Tabs extends Component {
   };
 
   render() {
-    const { activeIndex } = this.state;
-
     return (
       <section>
         <ListTabs>{this.renderChildrenTabs()}</ListTabs>
@@ -60,6 +61,12 @@ class Tabs extends Component {
     );
   }
 }
+
+Tabs.propTypes = {
+  defaultActiveIndex: PropTypes.number.isRequired,
+  children: PropTypes.shape({ props: PropTypes.shape(), map: PropTypes.func })
+    .isRequired,
+};
 
 Tabs.Tab = Tab;
 

@@ -5,9 +5,9 @@ import { TabItem } from './styles';
 function Tab({ label, isActive, onClick }) {
   return (
     <TabItem isActive={isActive}>
-      <a href="#" onClick={onClick}>
+      <button type="button" onClick={onClick}>
         {label}
-      </a>
+      </button>
     </TabItem>
   );
 }
