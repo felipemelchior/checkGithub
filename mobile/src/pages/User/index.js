@@ -32,24 +32,46 @@ export default class User extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     stars: [],
-    loading: false,
+    loading: true,
+    page: 1,
   };
 
   async componentDidMount() {
+    this.load();
+  }
+
+  load = async () => {
     const { navigation } = this.props;
+    const { stars, page } = this.state;
 
     this.setState({ loading: true });
 
     const user = navigation.getParam('user');
 
-    const response = await api.get(`/users/${user.login}/starred`);
+    const response = await api.get(`/users/${user.login}/starred`, {
+      params: {
+        page,
+      },
+    });
 
-    this.setState({ stars: response.data, loading: false });
-  }
+    this.setState({
+      stars: page >= 2 ? [...stars, response.data] : response.data,
+      loading: false,
+    });
+    console.tron.log(this.state);
+  };
+
+  loadMore = () => {
+    const { page } = this.state;
+
+    this.setState({ page: Number(page) + 1 });
+
+    this.load();
+  };
 
   render() {
     const { navigation } = this.props;
-    const { stars, loading } = this.state;
+    const { stars, loading, page } = this.state;
     const user = navigation.getParam('user');
 
     return (
@@ -66,6 +88,8 @@ export default class User extends Component {
           <Stars
             data={stars}
             keyExtractor={star => String(star.id)}
+            onEndReachedThresold={0.2}
+            onEndReached={this.loadMore}
             renderItem={({ item }) => (
               <Starred>
                 <OwnerAvatar source={{ uri: item.owner.avatar_url }} />
