@@ -26,6 +26,7 @@ export default class User extends Component {
   static propTypes = {
     navigation: PropTypes.shape({
       getParam: PropTypes.func,
+      navigate: PropTypes.func,
     }).isRequired,
   };
 
@@ -58,7 +59,6 @@ export default class User extends Component {
       stars: page >= 2 ? [...stars, response.data] : response.data,
       loading: false,
     });
-    console.tron.log(this.state);
   };
 
   loadMore = () => {
@@ -67,6 +67,11 @@ export default class User extends Component {
     this.setState({ page: Number(page) + 1 });
 
     this.load();
+  };
+
+  handleNavigation = repository => {
+    const { navigation } = this.props;
+    navigation.navigate('Repository', { repository });
   };
 
   render() {
@@ -91,7 +96,7 @@ export default class User extends Component {
             onEndReachedThresold={0.2}
             onEndReached={this.loadMore}
             renderItem={({ item }) => (
-              <Starred>
+              <Starred onPress={() => this.handleNavigation(item)}>
                 <OwnerAvatar source={{ uri: item.owner.avatar_url }} />
                 <Info>
                   <Title>{item.name}</Title>
